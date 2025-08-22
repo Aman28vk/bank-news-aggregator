@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Awareness News</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function openTab(evt, categoryName) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(categoryName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        window.onload = function() {
+            document.getElementsByClassName('tablinks')[0].click();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Banking & General Awareness News</h1>
+
+        <!-- Tab buttons -->
+        <div class="tab">
+            {% for category in news.keys() %}
+            <button class="tablinks" onclick="openTab(event, '{{ category }}')">{{ category }}</button>
+            {% endfor %}
+        </div>
+
+        <!-- Tab content -->
+        {% for category, items in news.items() %}
+        <div id="{{ category }}" class="tabcontent">
+            <ul>
+                {% if items %}
+                    {% for item in items %}
+                    <li>
+                        <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+                        {% if item.published %}
+                            <div class="time">{{ item.published }}</div>
+                        {% endif %}
+                        {% if item.summary %}
+                            <div class="summary">{{ item.summary|safe }}</div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No news available.</li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
